@@ -1,87 +1,60 @@
-import { createRequire } from "node:module";
-import * as esbuild from "esbuild";
-import { rimraf } from "rimraf";
-import stylePlugin from "esbuild-style-plugin";
-import autoprefixer from "autoprefixer";
-import tailwindcss from "tailwindcss";
-import pkg from "@esbuild-plugins/tsconfig-paths";
-import { internalIpV4 } from "internal-ip";
-import http from "node:http";
-const tsconfigPaths = pkg.default || pkg;
+// Example of improved build script structure
+import esbuild from 'esbuild';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const args = process.argv.slice(2);
-const isProd = args[0] === "--production";
-
-await rimraf("dist");
-
-/**
- * @type {esbuild.BuildOptions}
- */
-const esbuildOpts = {
-  color: true,
-  entryPoints: ["src/main.tsx"],
-  outfile: "dist/widget.js",
-  write: true,
+// Configuration
+const config = {
+  entryPoints: ['./src/index.js'],
+  outdir: './dist',
   bundle: true,
-  format: "iife",
-  sourcemap: isProd ? false : "linked",
-  minify: isProd,
-  treeShaking: true,
-  jsx: "automatic",
-  loader: {
-    ".png": "file",
-  },
-  plugins: [
-    tsconfigPaths({ tsconfig: "./tsconfig.json" }),
-    stylePlugin({
-      postcss: {
-        plugins: [tailwindcss, autoprefixer],
-      },
-    }),
-  ],
+  minify: process.env.NODE_ENV === 'production',
+  sourcemap: process.env.NODE_ENV !== 'production',
+  target: ['es2020'],
+  platform: 'browser',
+  // Add more configuration options
 };
 
-if (isProd) {
-  await esbuild.build(esbuildOpts);
-} else {
-  const localIp = await internalIpV4();
-  const ctx = await esbuild.context(esbuildOpts);
+// Build function with error handling
+async function build() {
+  console.log('🚀 Starting build process...');
+  const startTime = Date.now();
 
-  const { host, port } = await ctx.serve({
-    servedir: "dist",
-    port: 3000,
-    host: "0.0.0.0",
-  });
+  try {
+    // Clean dist directory
+    await fs.rm(config.outdir, { recursive: true, force: true });
+    await fs.mkdir(config.outdir, { recursive: true });
 
-  const proxyServer = http.createServer((req, res) => {
-    const proxyOptions = {
-      hostname: "localhost",
-      port: 11434,
-      path: req.url.startsWith("/api") ? req.url.substring(4) : req.url,
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host: "localhost:11434",
-      },
-    };
-
-    const proxyReq = http.request(proxyOptions, (proxyRes) => {
-      res.writeHead(proxyRes.statusCode, proxyRes.headers);
-      proxyRes.pipe(res, { end: true });
+    // Run esbuild
+    const result = await esbuild.build({
+      ...config,
+      metafile: true,
     });
 
-    req.pipe(proxyReq, { end: true });
-  });
+    // Copy static assets
+    await copyStaticAssets();
 
-  proxyServer.listen(8080);
+    // Generate build report
+    const buildTime = Date.now() - startTime;
+    console.log(`✅ Build completed in ${buildTime}ms`);
+    
+    // Analyze bundle size
+    const text = await esbuild.analyzeMetafile(result.metafile);
+    console.log(text);
 
-  await ctx.watch();
-
-  console.log(`Running on:`);
-  console.log(`http://localhost:${port}`);
-  if (localIp) {
-    console.log(`http://${localIp}:${port}`);
+  } catch (error) {
+    console.error('❌ Build failed:', error);
+    process.exit(1);
   }
 }
+
+// Helper function to copy static assets
+async function copyStaticAssets() {
+  // Copy HTML, images, etc.
+}
+
+// Run build
+build();
