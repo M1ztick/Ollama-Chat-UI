@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Ollama Chat Widget
  * Plugin URI: https://rebeldev.mistykmedia.com
@@ -13,14 +14,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class OllamaChatWidget {
-    
-    public function __construct() {
+class OllamaChatWidget
+{
+
+    public function __construct()
+    {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_footer', array($this, 'add_widget_container'));
     }
-    
-    public function enqueue_scripts() {
+
+    public function enqueue_scripts()
+    {
         // Only load on frontend, not admin pages
         if (!is_admin()) {
             wp_enqueue_style(
@@ -29,7 +33,7 @@ class OllamaChatWidget {
                 array(),
                 '1.0.0'
             );
-            
+
             wp_enqueue_script(
                 'ollama-chat-widget-js',
                 plugin_dir_url(__FILE__) . 'index.js',
@@ -39,8 +43,9 @@ class OllamaChatWidget {
             );
         }
     }
-    
-    public function add_widget_container() {
+
+    public function add_widget_container()
+    {
         // The widget creates its own container, so we don't need to add HTML
         // But we can add a noscript fallback
         echo '<noscript><p>Please enable JavaScript to use the chat widget.</p></noscript>';
@@ -49,4 +54,3 @@ class OllamaChatWidget {
 
 // Initialize the plugin
 new OllamaChatWidget();
-?>
