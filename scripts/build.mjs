@@ -8,13 +8,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuration
 const config = {
-  entryPoints: ['./src/index.js'],
+  entryPoints: ['./src/index.tsx'],
   outdir: './dist',
   bundle: true,
   minify: process.env.NODE_ENV === 'production',
   sourcemap: process.env.NODE_ENV !== 'production',
   target: ['es2020'],
   platform: 'browser',
+  loader: {
+    '.tsx': 'tsx',
+    '.ts': 'ts',
+  },
+  jsx: 'automatic',
   // Add more configuration options
 };
 
@@ -53,7 +58,13 @@ async function build() {
 
 // Helper function to copy static assets
 async function copyStaticAssets() {
-  // Copy HTML, images, etc.
+  // Copy public directory contents to dist
+  try {
+    await fs.cp('./public', config.outdir, { recursive: true });
+    console.log('📁 Static assets copied');
+  } catch (error) {
+    console.warn('⚠️  No public directory found or failed to copy static assets:', error.message);
+  }
 }
 
 // Run build
