@@ -1,7 +1,7 @@
 # 🚀 WordPress Deployment Instructions
 
 ## Prerequisites Checklist
-- [ ] Ollama proxy running at `https://ollama-proxy.mistykmedia.org/api/chat`
+- [ ] Ollama proxy running at `https://ollama-chat-ui-e52.pages.dev/api/chat`
 - [ ] WordPress admin access
 - [ ] FTP/cPanel file manager access
 - [ ] Fresh build files (`npm run build` completed)
@@ -71,7 +71,7 @@ Add to your theme's `footer.php` before `</body>`:
 3. Verify CSS file is loading
 
 ### Chat Not Working?
-1. Test proxy URL directly: `https://ollama-proxy.mistykmedia.org/api/chat`
+1. Test proxy URL directly: `https://ollama-chat-ui-e52.pages.dev/api/chat`
 2. Check Ollama server is running
 3. Verify model is available
 
