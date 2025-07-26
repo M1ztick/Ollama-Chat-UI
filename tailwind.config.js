@@ -1,85 +1,32 @@
-// Import the bundled widget script as a string
-import widgetScript from "../dist/widget.js";
-
-export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ): Promise<Response> {
-    const url = new URL(request.url);
-
-    // Handle CORS preflight requests for the API
-    if (request.method === "OPTIONS" && url.pathname === "/api/chat") {
-      return handleOptions(request);
-    }
-
-    // Route 1: Serve the widget.js file
-    if (url.pathname === "/widget.js") {
-      return new Response(widgetScript, {
-        headers: {
-          "Content-Type": "application/javascript; charset=utf-8",
-          "Cache-Control": "public, max-age=86400", // Cache for 1 day
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: ["./src/**/*.{ts,tsx}"],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      keyframes: {
+        "accordion-down": {
+          from: { "block-size": "0" },
+          to: { "block-size": "var(--radix-accordion-content-height)" },
         },
-      });
-    }
-
-    // Route 2: Proxy API requests to Ollama
-    if (url.pathname === "/api/chat") {
-      // Re-create the request to forward to Ollama
-      const ollamaRequest = new Request("http://localhost:11434/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+        "accordion-up": {
+          from: { "block-size": "var(--radix-accordion-content-height)" },
+          to: { "block-size": "0" },
         },
-        body: request.body,
-      });
-
-      // The 'fetch' function in a worker with a tunnel automatically routes this
-      const ollamaResponse = await fetch(ollamaRequest);
-
-      // Create a new response with CORS headers to send back to the browser
-      const response = new Response(ollamaResponse.body, {
-        status: ollamaResponse.status,
-        statusText: ollamaResponse.statusText,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
-      });
-
-      return response;
-    }
-
-    // If no route matches, return 404
-    return new Response("Not found", { status: 404 });
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
   },
+  plugins: [require("tailwindcss-animate")],
 };
-
-// Standard CORS preflight handler
-function handleOptions(request: Request) {
-  if (
-    request.headers.get("Origin") !== null &&
-    request.headers.get("Access-Control-Request-Method") !== null &&
-    request.headers.get("Access-Control-Request-Headers") !== null
-  ) {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    });
-  } else {
-    return new Response(null, {
-      headers: {
-        Allow: "GET, POST, OPTIONS",
-      },
-    });
-  }
-}
-
-interface Env {
-  // This interface is kept for future environment variables if needed
-}
