@@ -1,0 +1,9 @@
+name = "ollama-chat-proxy"
+main = "index.ts"
+compatibility_date = "2025-07-25"
+
+[vars]
+OLLAMA_HOST = "http://localhost:11434"
+
+[observability.logs]
+enabled = true

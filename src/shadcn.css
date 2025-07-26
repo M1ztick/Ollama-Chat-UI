@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Removed Tailwind directives due to unknown at-rule error */
 
 :root {
   --background: 0 0% 100%;
@@ -89,9 +87,7 @@ html > body * {
   border-color: hsl(var(--border));
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-}
+
 
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -102,7 +98,4 @@ html > body * {
   border-radius: 5px;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(var(--border)) transparent;
-}
+/* Removed scrollbar-color for better browser compatibility */

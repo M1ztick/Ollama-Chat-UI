@@ -1,6 +1,14 @@
-import { createRoot } from 'react-dom/client'
-import './shadcn.css'
-import App from './App'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ChatWidget } from "./components/ChatWidget";
+import "./shadcn.css";
 
-const root = createRoot(document.getElementById('app')!)
-root.render(<App />)
+const widgetRoot = document.createElement("div");
+widgetRoot.id = "ollama-chat-widget-root";
+document.body.appendChild(widgetRoot);
+
+ReactDOM.createRoot(widgetRoot).render(
+  <React.StrictMode>
+    <ChatWidget />
+  </React.StrictMode>
+);
