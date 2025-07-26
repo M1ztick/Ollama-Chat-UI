@@ -1,95 +1,85 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ['class'],
-  content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
-  theme: {
-    container: {
-      center: true,
-    },
-    extend: {
-      colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+// Import the bundled widget script as a string
+import widgetScript from "../dist/widget.js";
+
+export default {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext
+  ): Promise<Response> {
+    const url = new URL(request.url);
+
+    // Handle CORS preflight requests for the API
+    if (request.method === "OPTIONS" && url.pathname === "/api/chat") {
+      return handleOptions(request);
+    }
+
+    // Route 1: Serve the widget.js file
+    if (url.pathname === "/widget.js") {
+      return new Response(widgetScript, {
+        headers: {
+          "Content-Type": "application/javascript; charset=utf-8",
+          "Cache-Control": "public, max-age=86400", // Cache for 1 day
         },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+      });
+    }
+
+    // Route 2: Proxy API requests to Ollama
+    if (url.pathname === "/api/chat") {
+      // Re-create the request to forward to Ollama
+      const ollamaRequest = new Request("http://localhost:11434/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+        body: request.body,
+      });
+
+      // The 'fetch' function in a worker with a tunnel automatically routes this
+      const ollamaResponse = await fetch(ollamaRequest);
+
+      // Create a new response with CORS headers to send back to the browser
+      const response = new Response(ollamaResponse.body, {
+        status: ollamaResponse.status,
+        statusText: ollamaResponse.statusText,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
         },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          1: 'hsl(var(--chart-1))',
-          2: 'hsl(var(--chart-2))',
-          3: 'hsl(var(--chart-3))',
-          4: 'hsl(var(--chart-4))',
-          5: 'hsl(var(--chart-5))',
-        },
-        sidebar: {
-          DEFAULT: 'hsl(var(--sidebar-background))',
-          foreground: 'hsl(var(--sidebar-foreground))',
-          primary: 'hsl(var(--sidebar-primary))',
-          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-          accent: 'hsl(var(--sidebar-accent))',
-          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-          border: 'hsl(var(--sidebar-border))',
-          ring: 'hsl(var(--sidebar-ring))',
-        },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-      keyframes: {
-        'accordion-down': {
-          from: {},
-          to: {},
-        },
-        'accordion-up': {
-          from: {},
-          to: {},
-        },
-        'slide-in-from-bottom': {
-          from: {
-            transform: 'translateY(16px)',
-            opacity: '0'
-          },
-          to: {
-            transform: 'translateY(0)',
-            opacity: '1'
-          }
-        }
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out'
-      },
-    },
+      });
+
+      return response;
+    }
+
+    // If no route matches, return 404
+    return new Response("Not found", { status: 404 });
   },
-  plugins: [require('tailwindcss-animate')],
+};
+
+// Standard CORS preflight handler
+function handleOptions(request: Request) {
+  if (
+    request.headers.get("Origin") !== null &&
+    request.headers.get("Access-Control-Request-Method") !== null &&
+    request.headers.get("Access-Control-Request-Headers") !== null
+  ) {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
+  } else {
+    return new Response(null, {
+      headers: {
+        Allow: "GET, POST, OPTIONS",
+      },
+    });
+  }
+}
+
+interface Env {
+  // This interface is kept for future environment variables if needed
 }
