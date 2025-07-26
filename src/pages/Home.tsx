@@ -172,7 +172,7 @@ export default function HomePage() {
 
     try {
       const response = await fetch(
-        "https://ollama-proxy.mistykmedia.com/api/chat",
+        "https://ollama-proxy.mistykmedia.org/api/chat",
         {
           method: "POST",
           headers: {

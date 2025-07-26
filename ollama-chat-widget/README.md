@@ -22,7 +22,7 @@
 - WordPress 5.0+
 - PHP 7.4+
 - JavaScript enabled in browser
-- Ollama proxy service running at: https://ollama-proxy.mistykmedia.org/api/chat
+- Ollama proxy service running at: https://ollama-proxy.mistykmedia.com/api/chat
 
 ## Files
 
