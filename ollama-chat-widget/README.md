@@ -20,27 +20,27 @@
 ## Requirements
 
 - WordPress 5.0+
-- PHP 7.4+
-- JavaScript enabled in browser
-- - Ollama proxy service running at: https://ollama-chat-ui-e52.pages.dev/api/chat
+- Modern browser with JavaScript enabled
+- Ollama proxy service running at: <https://ollama-chat-ui-e52.pages.dev/api/chat>
 
-## Files
+## Technical Details
 
-- `ollama-chat-widget.php` - Main plugin file
-- `index.js` - React chat widget (268KB optimized)
-- `index.css` - Styling (2.1KB)
+- **Bundle Size**: ~263KB optimized
+- **Framework**: React 18 with TypeScript
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **State Management**: Zustand
 
-## Configuration
+## Customization
 
-The widget is pre-configured for RebelDev.MistykMedia.com with:
+The widget is pre-configured for MistykMedia.com with:
+- Fixed positioning (bottom-right corner)
 - Purple/pink gradient design
-- Bottom-right positioning
 - Custom AI personality
-- Automatic model detection
+- Automatic model switching
 
 ## Support
 
-For issues or customization, contact: **Misty** @ RebelDev.MistykMedia.com
+For issues or customization, contact: **Misty** @ MistykMedia.com
 
 ---
 
