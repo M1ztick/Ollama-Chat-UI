@@ -85,7 +85,7 @@ export default function HomePage() {
    */
   const fetchAvailableModels = async () => {
     try {
-      const response = await fetch("http://localhost:11434/api/tags");
+      const response = await fetch("https://ollama-chat-ui-e52.pages.dev/api/tags");
       if (response.ok) {
         const data = await response.json();
         setAvailableModels(data.models || []);
@@ -298,7 +298,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+    <div className="h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 flex flex-col">
       <ChatHeader
         isLoadingModels={isLoadingModels}
         selectedModel={selectedModel}
@@ -309,9 +309,9 @@ export default function HomePage() {
       />
 
       {/* Chat Container */}
-      <div className="max-w-4xl mx-auto">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Messages */}
-        <div className="space-y-4 mb-6 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+        <div className="flex-1 space-y-4 mb-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent px-2">
           {messages.map((message) => (
             <ChatMessage
               key={message.id}
