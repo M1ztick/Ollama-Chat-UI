@@ -67,7 +67,7 @@ class OllamaChatWidget
             wp_localize_script('ollama-chat-widget-js', 'ocwData', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('ocw_nonce'),
-                'ollamaUrl' => get_option('ocw_ollama_url', 'http://localhost:11434'),
+                'ollamaUrl' => get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev'),
                 'siteName' => get_bloginfo('name'),
                 'siteUrl' => home_url(),
             ));
