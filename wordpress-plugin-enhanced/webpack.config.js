@@ -1,12 +1,12 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: 'production',
-  entry: './src/index.tsx',
+  mode: "production",
+  entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'index.js',
+    path: path.resolve(__dirname, "build"),
+    filename: "index.js",
     clean: true,
   },
   module: {
@@ -14,7 +14,7 @@ module.exports = {
       {
         test: /\.(ts|tsx)$/,
         use: {
-          loader: 'ts-loader',
+          loader: "ts-loader",
           options: {
             compilerOptions: {
               noEmit: false,
@@ -25,21 +25,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'index.css',
+      filename: "index.css",
     }),
   ],
   externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
+    react: "React",
+    "react-dom": "ReactDOM",
   },
   optimization: {
     minimize: true,
