@@ -67,7 +67,7 @@ class OllamaChatWidget
             wp_localize_script('ollama-chat-widget-js', 'ocwData', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('ocw_nonce'),
-                'ollamaUrl' => get_option('ocw_ollama_url', 'http://localhost:11434'),
+                'ollamaUrl' => get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev'),
                 'siteName' => get_bloginfo('name'),
                 'siteUrl' => home_url(),
             ));
@@ -89,6 +89,7 @@ class OllamaChatWidget
                     padding: 10px;
                     border-radius: 5px;
                     font-family: Arial, sans-serif;
+                    z-index: 9999;
                 }
             </style>
             <div class="ocw-noscript">
@@ -100,21 +101,29 @@ class OllamaChatWidget
 
     public function proxy_ollama_request()
     {
-        // Verify nonce
+        // Verify nonce for security
         if (!wp_verify_nonce($_POST['nonce'], 'ocw_nonce')) {
             wp_die('Security check failed');
         }
 
-        $ollama_url = get_option('ocw_ollama_url', 'http://localhost:11434');
+        $ollama_url = get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev');
         $endpoint = sanitize_text_field($_POST['endpoint']);
         $data = json_decode(stripslashes($_POST['data']), true);
 
-        // Make request to Ollama
+        // Add security headers
+        header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('X-XSS-Protection: 1; mode=block');
+
+        // Make request to Ollama API
         $response = wp_remote_post($ollama_url . '/api/' . $endpoint, array(
             'body' => json_encode($data),
-            'headers' => array('Content-Type' => 'application/json'),
+            'headers' => array(
+                'Content-Type' => 'application/json',
+                'User-Agent' => 'WordPress-OllamaWidget/' . OCW_VERSION
+            ),
             'timeout' => 30,
-            'stream' => true,
+            'sslverify' => true,
         ));
 
         if (is_wp_error($response)) {
@@ -122,6 +131,12 @@ class OllamaChatWidget
         }
 
         $body = wp_remote_retrieve_body($response);
+        $status_code = wp_remote_retrieve_response_code($response);
+
+        if ($status_code !== 200) {
+            wp_send_json_error('API request failed with status: ' . $status_code);
+        }
+
         wp_send_json_success($body);
     }
 
@@ -138,8 +153,12 @@ class OllamaChatWidget
 
     public function register_settings()
     {
-        register_setting('ocw_settings', 'ocw_ollama_url');
-        register_setting('ocw_settings', 'ocw_default_model');
+        register_setting('ocw_settings', 'ocw_ollama_url', array(
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('ocw_settings', 'ocw_default_model', array(
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
     }
 
     public function settings_page()
@@ -153,23 +172,29 @@ class OllamaChatWidget
                     <tr>
                         <th scope="row">Ollama API URL</th>
                         <td>
-                            <input type="text" name="ocw_ollama_url"
-                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'http://localhost:11434')); ?>"
+                            <input type="url" name="ocw_ollama_url"
+                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev')); ?>"
                                 class="regular-text" />
-                            <p class="description">URL to your Ollama instance</p>
+                            <p class="description">URL to your Ollama instance or Cloudflare Pages deployment</p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">Default Model</th>
                         <td>
                             <input type="text" name="ocw_default_model"
-                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama2')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama3.2')); ?>"
                                 class="regular-text" />
+                            <p class="description">Default Ollama model to use</p>
                         </td>
                     </tr>
                 </table>
                 <?php submit_button(); ?>
             </form>
+
+            <div class="notice notice-info">
+                <p><strong>RebelDev AI Chat Widget v<?php echo OCW_VERSION; ?></strong></p>
+                <p>This widget adds an AI-powered chat assistant to your site. The RebelDev AI has a unique personality - sarcastic, witty, but helpful!</p>
+            </div>
         </div>
 <?php
     }

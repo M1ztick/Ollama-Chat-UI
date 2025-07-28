@@ -6,26 +6,48 @@
 - [ ] FTP/cPanel file manager access
 - [ ] Fresh build files (`npm run build` completed)
 
-## 🎯 Method 1: WordPress Plugin (Recommended)
+## ✨ Enhanced Plugin Available!
 
-### Step 1: Create Plugin Directory
+**New Enhanced Version**: `/wordpress-plugin-enhanced/` includes:
+- Modern React + TypeScript build system
+- WordPress admin settings panel
+- Secure AJAX proxy with nonce verification
+- Professional plugin architecture
+- Model selection and chat history
+
+## 🎯 Method 1: Enhanced WordPress Plugin (Recommended)
+
+### Step 1: Build the Enhanced Plugin
+```bash
+cd wordpress-plugin-enhanced
+npm install
+npm run build
+```
+
+### Step 2: Create Plugin Directory
 1. Connect to your WordPress site via FTP or cPanel File Manager
 2. Navigate to `/wp-content/plugins/`
 3. Create new folder: `ollama-chat-widget`
 
-### Step 2: Upload Files
+### Step 3: Upload Enhanced Plugin Files
 Upload these files to `/wp-content/plugins/ollama-chat-widget/`:
-- `ollama-chat-widget.php` (from wordpress-plugin folder)
-- `index.js` (from dist folder)
-- `index.css` (from dist folder)
+- `ollama-chat-widget.php` (from wordpress-plugin-enhanced folder)
+- `build/index.js` (compiled JavaScript)
+- `build/index.css` (compiled CSS) 
 
-### Step 3: Activate Plugin
+### Step 4: Activate Plugin
 1. Go to WordPress Admin → Plugins
-2. Find "Ollama Chat Widget"
+2. Find "Ollama Chat Widget - RebelDev AI"
 3. Click "Activate"
 
-### Step 4: Test
-Visit any page on your website - you should see the purple bot icon in bottom-right corner!
+### Step 5: Configure Settings
+1. Go to WordPress Admin → Settings → Ollama Chat
+2. Set your Ollama API URL (default: https://ollama-chat-ui-e52.pages.dev)
+3. Set default model (default: llama3.2)
+4. Save changes
+
+### Step 6: Test
+Visit any page on your website - you should see the blue chat icon in bottom-right corner!
 
 ---
 
