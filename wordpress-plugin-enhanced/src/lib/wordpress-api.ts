@@ -31,8 +31,10 @@ export class WordPressAPI {
 
     try {
       return JSON.parse(result.data);
-    } catch (error) {
-      throw new Error("Failed to parse JSON response: " + error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      throw new Error("Failed to parse JSON response: " + errorMessage);
     }
   }
 
