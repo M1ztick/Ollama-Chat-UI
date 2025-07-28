@@ -89,7 +89,7 @@ class OllamaChatWidget
                     padding: 10px;
                     border-radius: 5px;
                     font-family: Arial, sans-serif;
-                    z-index: 9999;
+                    z-index: 999999;
                 }
             </style>
             <div class="ocw-noscript">
