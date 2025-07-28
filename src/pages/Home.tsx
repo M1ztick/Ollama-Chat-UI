@@ -85,7 +85,9 @@ export default function HomePage() {
    */
   const fetchAvailableModels = async () => {
     try {
-      const response = await fetch("https://ollama-chat-ui-e52.pages.dev/api/tags");
+      const response = await fetch(
+        "https://ollama-chat-ui-e52.pages.dev/api/tags"
+      );
       if (response.ok) {
         const data = await response.json();
         setAvailableModels(data.models || []);

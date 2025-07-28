@@ -67,7 +67,7 @@ class OllamaChatWidget
             wp_localize_script('ollama-chat-widget-js', 'ocwData', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('ocw_nonce'),
-                'ollamaUrl' => get_option('ocw_ollama_url', 'http://localhost:11434'),
+                'ollamaUrl' => get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev'),
                 'siteName' => get_bloginfo('name'),
                 'siteUrl' => home_url(),
             ));
@@ -105,7 +105,7 @@ class OllamaChatWidget
             wp_die('Security check failed');
         }
 
-        $ollama_url = get_option('ocw_ollama_url', 'http://localhost:11434');
+        $ollama_url = get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev');
         $endpoint = sanitize_text_field($_POST['endpoint']);
         $data = json_decode(stripslashes($_POST['data']), true);
 
@@ -154,7 +154,7 @@ class OllamaChatWidget
                         <th scope="row">Ollama API URL</th>
                         <td>
                             <input type="text" name="ocw_ollama_url"
-                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'http://localhost:11434')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev')); ?>"
                                 class="regular-text" />
                             <p class="description">URL to your Ollama instance</p>
                         </td>
@@ -163,7 +163,7 @@ class OllamaChatWidget
                         <th scope="row">Default Model</th>
                         <td>
                             <input type="text" name="ocw_default_model"
-                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama2')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama3.2')); ?>"
                                 class="regular-text" />
                         </td>
                     </tr>
