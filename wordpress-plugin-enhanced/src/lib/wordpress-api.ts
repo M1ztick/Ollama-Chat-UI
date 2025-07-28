@@ -29,7 +29,11 @@ export class WordPressAPI {
       throw new Error(result.data || "Request failed");
     }
 
-    return JSON.parse(result.data);
+    try {
+      return JSON.parse(result.data);
+    } catch (error) {
+      throw new Error("Failed to parse JSON response: " + error.message);
+    }
   }
 
   async getModels(): Promise<string[]> {
