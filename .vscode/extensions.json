@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "zobo.php-intellisense"
+        "zobo.php-intellisense",
+        "haselerdev.aiquickfix"
     ]
 }
