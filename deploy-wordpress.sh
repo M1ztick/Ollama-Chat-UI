@@ -21,7 +21,7 @@ cp dist/index.css wordpress-plugin/
 echo "✅ Deployment complete!"
 echo ""
 echo "📋 Next steps:"
-echo "1. Upload the entire 'wordpress-plugin' folder to your WordPress site:"
+echo "1. Upload the entire 'wordpress-plugin' folder to your WordPress site: mistykmedia.com"
 echo "   wp-content/plugins/ollama-chat-widget/"
 echo ""
 echo "2. Activate the plugin in WordPress admin"
