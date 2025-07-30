@@ -32,9 +32,12 @@ export class WordPressAPI {
     try {
       return JSON.parse(result.data);
     } catch (error: unknown) {
+      if (error instanceof SyntaxError) {
+        throw new Error("Invalid JSON format in response: " + error.message);
+      }
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      throw new Error("Failed to parse JSON response: " + errorMessage);
+      throw new Error("Unexpected error while parsing JSON response: " + errorMessage);
     }
   }
 
