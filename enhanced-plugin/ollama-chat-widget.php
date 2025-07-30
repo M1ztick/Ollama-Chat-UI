@@ -18,8 +18,36 @@ if (!defined('ABSPATH')) {
 
 // Define plugin constants
 define('OCW_VERSION', '1.0.0');
-define('OCW_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('OCW_PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+/*
+ * Provide minimal stubs for WordPress helper functions when the file is
+ * analysed or executed outside of a WordPress context (e.g. static analysis,
+ * unit tests). They are only declared if the real functions do not exist.
+ */
+if (!function_exists('plugin_dir_url')) {
+    function plugin_dir_url(string $file): string
+    {
+        return '';
+    }
+}
+if (!function_exists('plugin_dir_path')) {
+    function plugin_dir_path(string $file): string
+    {
+        return dirname($file) . '/';
+    }
+}
+/*
+ * Guard against cases where the file is parsed outside of WordPress
+ * (e.g. static analysis tools) and the helper functions are unavailable.
+ */
+if (function_exists('plugin_dir_url') && function_exists('plugin_dir_path')) {
+    define('OCW_PLUGIN_URL', plugin_dir_url(__FILE__));
+    define('OCW_PLUGIN_PATH', plugin_dir_path(__FILE__));
+} else {
+    // Fallback values to keep the file parse-able.
+    define('OCW_PLUGIN_URL', '');
+    define('OCW_PLUGIN_PATH', dirname(__FILE__) . '/');
+}
 
 class OllamaChatWidget
 {

@@ -3,6 +3,8 @@ import { useChatStore } from "../lib/chat-store";
 import { wpApi } from "../lib/wordpress-api";
 import { formatTimestamp, scrollToBottom } from "../lib/utils";
 
+import "./ChatWidget.css";
+
 export const ChatWidget: React.FC = () => {
   const {
     messages,
@@ -144,7 +146,14 @@ export const ChatWidget: React.FC = () => {
           <span className="font-semibold">RebelDev AI</span>
         </div>
         <div className="flex items-center space-x-2">
+          {/* Accessible label for screen readers */}
+          <label htmlFor="model-select" className="sr-only">
+            Choose AI model
+          </label>
           <select
+            id="model-select"
+            title="Choose AI model"
+            aria-label="Choose AI model"
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
             className="text-sm bg-blue-700 text-white border border-blue-500 rounded px-2 py-1"
@@ -229,18 +238,14 @@ export const ChatWidget: React.FC = () => {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 px-3 py-2 rounded-lg">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+            <div className="bg-gray-100 px-3 py-2 rounded-lg flex space-x-1">
+              {["0s", "0.1s", "0.2s"].map((delay, idx) => (
                 <div
+                  key={idx}
                   className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.1s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
-              </div>
+                  style={{ animationDelay: delay }}
+                />
+              ))}
             </div>
           </div>
         )}
@@ -287,6 +292,8 @@ export const ChatWidget: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
+            aria-label="Send message"
+            title="Send message"
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200"
           >
             <svg
