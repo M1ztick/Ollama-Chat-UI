@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Plugin Name: Ollama Chat Widget - RebelDev AI
- * Plugin URI: https://mistykmedia.org
- * Description: The RebelDev AI Chat Widget - A sarcastic, witty AI assistant for MistykMedia.org
+ * Plugin Name: Ollama Chat Widget - Mistyk Media
+ * Plugin URI: https://mistykmedia.com
+ * Description: The Mistyk Media Chat Widget - A sarcastic, witty AI assistant for MistykMedia.com
  * Version: 1.0.0
  * Author: Misty (M1ztick)
- * Author URI: https://mistykmedia.org
+ * Author URI: https://mistykmedia.com
  * License: GPL v2 or later
  * Text Domain: ollama-chat-widget
  */
@@ -120,7 +120,7 @@ class OllamaChatWidget
                 }
             </style>
             <div class="ocw-noscript">
-                Enable JavaScript to chat with RebelDev AI
+                Enable JavaScript to chat with Mistyk Media
             </div>
         </noscript>
     <?php
@@ -191,7 +191,7 @@ class OllamaChatWidget
                         <th scope="row">Default Model</th>
                         <td>
                             <input type="text" name="ocw_default_model"
-                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama3.2')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama3')); ?>"
                                 class="regular-text" />
                         </td>
                     </tr>
