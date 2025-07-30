@@ -101,8 +101,7 @@ class OllamaChatWidget
     public function proxy_ollama_request()
     {
         // Verify nonce
-        $nonce = sanitize_text_field(wp_unslash($_POST['nonce']));
-        if (!wp_verify_nonce($nonce, 'ocw_nonce')) {
+        if (!wp_verify_nonce(wp_unslash($_POST['nonce']), 'ocw_nonce')) {
             wp_die('Security check failed');
         }
 
