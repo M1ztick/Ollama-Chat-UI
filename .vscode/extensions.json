@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "zobo.php-intellisense",
-        "haselerdev.aiquickfix"
+        "haselerdev.aiquickfix",
+        "genieai.chatgpt-vscode"
     ]
 }
