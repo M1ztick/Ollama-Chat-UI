@@ -64,8 +64,8 @@ module.exports = (env, argv) => {
       }),
     ],
     externals: {
-      'react': 'wp.element',
-      'react-dom': 'wp.element',
+      react: "wp.element",
+      "react-dom": "wp.element",
     },
     optimization: {
       minimize: isProduction,
