@@ -64,9 +64,8 @@ module.exports = (env, argv) => {
       }),
     ],
     externals: {
-      // Uncomment if WordPress provides React globally:
-      // 'react': 'React',
-      // 'react-dom': 'ReactDOM',
+      'react': 'wp.element',
+      'react-dom': 'wp.element',
     },
     optimization: {
       minimize: isProduction,
