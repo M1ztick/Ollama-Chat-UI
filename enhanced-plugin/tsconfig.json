@@ -1,36 +1,42 @@
 {
   "compilerOptions": {
+    // Modern JS features and target environments
     "target": "ES2020",
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ES6"
+      "ES2020"
     ],
+    // JS Interop
     "allowJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    // Type Checking
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, // For faster builds; set to false for stricter type safety
+    // Module system
     "module": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    // JSX/React support
     "jsx": "react-jsx",
+    // Aliasing for cleaner imports
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    // Other Options
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true // Don't output .js files; useful for type checking only
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "build",
-    "**/*.js"
+    "build"
   ]
 }

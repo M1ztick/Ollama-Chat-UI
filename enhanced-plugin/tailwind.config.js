@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    // Add more paths if you use Tailwind in other folders/files (e.g., './public/**/*.html')
+  ],
   theme: {
     extend: {
       colors: {
@@ -45,5 +48,11 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Official plugins you may want to use:
+    // require('@tailwindcss/forms'),
+    // require('@tailwindcss/typography'),
+    // require('@tailwindcss/aspect-ratio'),
+    // require('@tailwindcss/line-clamp'),
+  ],
 };
