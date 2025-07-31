@@ -51,12 +51,35 @@ class OllamaChatWidget
 
     public function enqueue_scripts()
     {
-        // Enqueue necessary scripts and styles
+        // Load React and ReactDOM from a CDN
+        wp_enqueue_script(
+            'react',
+            'https://unpkg.com/react@18/umd/react.production.min.js',
+            [],
+            '18.2.0',
+            true
+        );
+        wp_enqueue_script(
+            'react-dom',
+            'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+            ['react'],
+            '18.2.0',
+            true
+        );
+
+        // Now load your compiled bundle after those scripts
+        wp_enqueue_script(
+            'ollama-chat-widget-js',
+            OCW_PLUGIN_URL . 'build/index.js',
+            ['react', 'react-dom'],
+            OCW_VERSION,
+            true
+        );
     }
 
     public function render_chat_widget()
     {
-        // Render the chat widget HTML
+        echo '<div id="ollama-chat-widget-root"></div>';
     }
 
     public static function get_instance()
