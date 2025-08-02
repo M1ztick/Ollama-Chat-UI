@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: Ollama Chat Widget - RebelDev AI
- * Plugin URI: https://mistykmedia.com
- * Description: The RebelDev AI Chat Widget - A sarcastic, witty AI assistant for MistykMedia.com
+ * Plugin URI: https://mistykmedia.org
+ * Description: The RebelDev AI Chat Widget - A sarcastic, witty AI assistant for MistykMedia.org
  * Version: 1.0.0
  * Author: Misty (M1ztick)
- * Author URI: https://mistykmedia.com
+ * Author URI: https://mistykmedia.org
  * License: GPL v2 or later
  * Text Domain: ollama-chat-widget
  */
@@ -101,11 +101,11 @@ class OllamaChatWidget
     public function proxy_ollama_request()
     {
         // Verify nonce
-        if (!wp_verify_nonce(wp_unslash($_POST['nonce']), 'ocw_nonce')) {
+        if (!wp_verify_nonce($_POST['nonce'], 'ocw_nonce')) {
             wp_die('Security check failed');
         }
 
-        $ollama_url = get_option('ocw_ollama_url', 'http://localhost:11434');
+        $ollama_url = get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev');
         $endpoint = sanitize_text_field($_POST['endpoint']);
         $data = json_decode(stripslashes($_POST['data']), true);
 
@@ -154,7 +154,7 @@ class OllamaChatWidget
                         <th scope="row">Ollama API URL</th>
                         <td>
                             <input type="text" name="ocw_ollama_url"
-                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'http://localhost:11434')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_ollama_url', 'https://ollama-chat-ui-e52.pages.dev')); ?>"
                                 class="regular-text" />
                             <p class="description">URL to your Ollama instance</p>
                         </td>
@@ -163,7 +163,7 @@ class OllamaChatWidget
                         <th scope="row">Default Model</th>
                         <td>
                             <input type="text" name="ocw_default_model"
-                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama2')); ?>"
+                                value="<?php echo esc_attr(get_option('ocw_default_model', 'llama3.2')); ?>"
                                 class="regular-text" />
                         </td>
                     </tr>

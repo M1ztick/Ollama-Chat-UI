@@ -46,9 +46,39 @@ class OllamaChatWidget
 
     public function add_widget_container()
     {
-        // The widget creates its own container, so we don't need to add HTML
-        // But we can add a noscript fallback
-        echo '<noscript><p>Please enable JavaScript to use the chat widget.</p></noscript>';
+        // Output the Rebeldev widget container and script
+?>
+        <div id="rebeldev-widget">
+            <textarea id="user-input" placeholder="Ask Rebeldev anything..."></textarea>
+            <button onclick="askRebeldev()">Ask</button>
+            <pre id="rebel-output"></pre>
+        </div>
+        <script>
+            async function askRebeldev() {
+                const input = document.getElementById("user-input").value;
+                const output = document.getElementById("rebel-output");
+                output.textContent = "Summoning Rebeldev...";
+                try {
+                    const res = await fetch("https://chat.mistykmedia.com/api/rebeldev", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            input
+                        }),
+                    });
+                    const data = await res.json();
+                    output.textContent = data.reply || "🤬 Error: No comeback generated.";
+                } catch (err) {
+                    output.textContent = "⚠️ Rebeldev exploded. Try again later.";
+                }
+            }
+        </script>
+        <noscript>
+            <p>Please enable JavaScript to use the chat widget.</p>
+        </noscript>
+<?php
     }
 }
 

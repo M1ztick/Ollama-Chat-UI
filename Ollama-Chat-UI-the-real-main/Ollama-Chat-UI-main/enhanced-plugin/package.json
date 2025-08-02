@@ -1,0 +1,47 @@
+{
+  "name": "ollama-chat-widget-enhanced",
+  "version": "1.0.0",
+  "description": "Enhanced WordPress plugin for Ollama Chat Widget with React build system",
+  "main": "build/index.js",
+  "scripts": {
+    "dev": "webpack --mode=development --watch",
+    "build": "webpack --mode=production",
+    "package": "npm run build && ./scripts/package.sh",
+    "test": "echo \"Tests to be implemented\" && exit 0"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "ollama",
+    "chat",
+    "ai",
+    "react",
+    "typescript"
+  ],
+  "author": "Misty (M1ztick)",
+  "license": "GPL-2.0-or-later",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/wordpress__hooks": "^3.0.0",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.2",
+    "postcss": "^8.5.0",
+    "postcss-loader": "^8.1.1",
+    "tailwindcss": "^3.4.17",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
